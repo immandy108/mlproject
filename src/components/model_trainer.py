@@ -40,16 +40,57 @@ class ModelTrainer:
             models = {
                 "AdaBoost":AdaBoostRegressor(),
                 "Random Forest":RandomForestRegressor(),
-                "GradientBoosting":GradientBoostingRegressor(),
+                "Gradient Boosting":GradientBoostingRegressor(),
                 "Linear Regression":LinearRegression(),
-                "DecisionTree":DecisionTreeRegressor(),
+                "Decision Tree":DecisionTreeRegressor(),
                 "KNN":KNeighborsRegressor(),
-                "CatBoost":CatBoostRegressor(verbose=False),
-                "XGBoost":XGBRegressor()
+                "CatBoosting Regressor":CatBoostRegressor(verbose=False),
+                "XGBRegressor":XGBRegressor()
 
             }
+            # Hyper Parameter Tuning
+            params = {
+                "Decision Tree": {
+                    'criterion': ['squared_error', 'absolute_error', 'poisson'],
+                    # 'splitter': ['best', 'random'],
+                    # 'max_features': ['sqrt', 'log2', None],
+                },
+                "Random Forest": {
+                    # 'criterion': ['squared_error', 'friedman_mse', 'absolute_error', 'poisson'],
+                    # 'max_features': ['sqrt', 'log2', None],
+                    'n_estimators': [8, 16, 32, 64, 128, 256],
+                },
+                "Gradient Boosting": {
+                    # 'loss': ['squared_error', 'huber', 'absolute_error', 'quantile'],
+                    'learning_rate': [0.1, 0.01, 0.05, 0.001],
+                    'subsample': [0.6, 0.7, 0.75, 0.8, 0.85, 0.9],
+                    # 'criterion': ['friedman_mse', 'squared_error'],
+                    # 'max_features': ['sqrt', 'log2', None],   # 'auto' removed
+                    'n_estimators': [8, 16, 32, 64, 128, 256],
+                },
+                "KNN": {
+                    'n_neighbors': [3, 5, 7, 9, 11],
+                    'weights': ['uniform', 'distance'],
+                },
+                "Linear Regression": {},
+                "XGBRegressor": {
+                    'learning_rate': [0.1, 0.01, 0.05, 0.001],
+                    'n_estimators': [8, 16, 32, 64, 128, 256],
+                },
+                "CatBoosting Regressor": {
+                    'depth': [6, 8, 10],
+                    'learning_rate': [0.01, 0.05, 0.1],
+                    'iterations': [30, 50, 100],
+                },
+                "AdaBoost": {
+                    'learning_rate': [0.1, 0.01, 0.5, 0.001],
+                    # 'loss': ['linear', 'square', 'exponential'],
+                    'n_estimators': [8, 16, 32, 64, 128, 256],
+                },
+            }
+
             model_report:dict=evaluate_model(X_train=X_train,y_train=y_train,X_test=X_test,y_test=y_test,
-                                             models=models)
+                                             models=models,param=params)
 
             #To get best model score from dict
 
